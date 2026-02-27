@@ -273,6 +273,7 @@
             button3.TabIndex = 14;
             button3.Text = "Admin";
             button3.UseVisualStyleBackColor = true;
+            button3.Visible = false;
             button3.Click += button3_Click;
             // 
             // label7

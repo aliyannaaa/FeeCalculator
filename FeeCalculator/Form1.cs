@@ -5,6 +5,10 @@ namespace FeeCalculator
         public Form1()
         {
             InitializeComponent();
+            
+            this.KeyPreview = true;
+            this.KeyDown += Form1_KeyDown;
+
             label1.Text = "Surchage";
             label1.Visible = false;
             textBox1.Visible = false;
@@ -23,6 +27,24 @@ namespace FeeCalculator
             panel3.Visible = false;
 
         }
+
+        // Toggle visibility of the admin button using a hotkey (Ctrl+Shift+A)
+        private void Form1_KeyDown(object? sender, KeyEventArgs e)
+        {
+            if (e.Control && e.Shift && e.KeyCode == Keys.A)
+            {
+                // Toggle the admin button visibility
+                button3.Visible = !button3.Visible;
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        // Templates for admin-editable formula breakdowns. Use placeholders:
+        // {surcharge} - replaced with the surcharge input value
+        // {ticketTotal} - replaced with ticket total input value
+        // {serviceFee} - replaced with service fee input value
+        private string surchargeFormulaTemplate = "(({surcharge} - 5) * 0.045) + 10";
+        private string arFormulaTemplate = "{ticketTotal} + {serviceFee}";
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -144,7 +166,15 @@ namespace FeeCalculator
 
         private void button3_Click(object sender, EventArgs e)
         {
-
+            using (var admin = new AdminForm(surchargeFormulaTemplate, arFormulaTemplate))
+            {
+                if (admin.ShowDialog(this) == DialogResult.OK)
+                {
+                    surchargeFormulaTemplate = admin.SurchargeFormula;
+                    arFormulaTemplate = admin.ARFormula;
+                    MessageBox.Show("Formulas updated.", "Admin", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
         }
 
         private void label3_Click(object sender, EventArgs e)
