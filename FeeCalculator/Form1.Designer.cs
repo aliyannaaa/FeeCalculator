@@ -50,9 +50,13 @@
             panel5 = new Panel();
             button3 = new Button();
             label7 = new Label();
+            label8 = new Label();
+            label9 = new Label();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
+            panel4.SuspendLayout();
             panel3.SuspendLayout();
+            panel5.SuspendLayout();
             SuspendLayout();
             // 
             // button1
@@ -224,6 +228,7 @@
             // panel4
             // 
             panel4.BackColor = Color.FromArgb(6, 141, 157);
+            panel4.Controls.Add(label8);
             panel4.Dock = DockStyle.Top;
             panel4.Location = new Point(0, 0);
             panel4.Name = "panel4";
@@ -259,6 +264,7 @@
             // panel5
             // 
             panel5.BackColor = Color.FromArgb(6, 141, 157);
+            panel5.Controls.Add(label9);
             panel5.Dock = DockStyle.Top;
             panel5.Location = new Point(0, 0);
             panel5.Name = "panel5";
@@ -287,6 +293,27 @@
             label7.TabIndex = 15;
             label7.Text = "Choose what fee to be calculated";
             // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
+            label8.Location = new Point(10, 8);
+            label8.Name = "label8";
+            label8.Size = new Size(78, 15);
+            label8.TabIndex = 16;
+            label8.Text = "surcharge fee";
+            label8.Click += label8_Click;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
+            label9.Location = new Point(18, 8);
+            label9.Name = "label9";
+            label9.Size = new Size(81, 15);
+            label9.TabIndex = 17;
+            label9.Text = "ar amount fee";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -307,8 +334,12 @@
             panel1.PerformLayout();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
+            panel4.ResumeLayout(false);
+            panel4.PerformLayout();
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
+            panel5.ResumeLayout(false);
+            panel5.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -336,5 +367,7 @@
         private Label label7;
         private Button button4;
         private Button button5;
+        private Label label8;
+        private Label label9;
     }
 }

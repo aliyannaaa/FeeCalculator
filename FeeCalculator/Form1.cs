@@ -1,3 +1,7 @@
+using System.Data;
+using System.Collections.Generic;
+using System.Globalization;
+
 namespace FeeCalculator
 {
     public partial class Form1 : Form
@@ -5,7 +9,7 @@ namespace FeeCalculator
         public Form1()
         {
             InitializeComponent();
-            
+
             this.KeyPreview = true;
             this.KeyDown += Form1_KeyDown;
 
@@ -46,6 +50,89 @@ namespace FeeCalculator
         private string surchargeFormulaTemplate = "(({surcharge} - 5) * 0.045) + 10";
         private string arFormulaTemplate = "{ticketTotal} + {serviceFee}";
 
+        // Note: numeric calculations use the original straightforward logic.
+        // Admin templates are used only to display the breakdown text by replacing placeholders.
+
+        // Try to evaluate a template to a numeric value. Supports basic arithmetic and a CEILING(...) function.
+        // Templates should contain placeholders like {surcharge}, {ticketTotal}, {serviceFee} which will be
+        // replaced with numeric values before evaluation.
+        private bool TryEvaluateTemplate(string template, IDictionary<string, double> values, out double result, out string replaced)
+        {
+            replaced = template;
+            // Replace placeholders with invariant-formatted numbers
+            foreach (var kv in values)
+            {
+                replaced = replaced.Replace(kv.Key, kv.Value.ToString(CultureInfo.InvariantCulture));
+            }
+
+            // Normalize decimal separator
+            replaced = replaced.Replace(',', '.');
+
+            try
+            {
+                // Handle CEILING(...) occurrences from innermost to outer
+                while (true)
+                {
+                    int idx = IndexOfIgnoreCase(replaced, "CEILING(");
+                    if (idx == -1) break;
+
+                    int start = idx + "CEILING(".Length;
+                    int depth = 1;
+                    int i = start;
+                    for (; i < replaced.Length; i++)
+                    {
+                        if (replaced[i] == '(') depth++;
+                        else if (replaced[i] == ')') depth--;
+                        if (depth == 0) break;
+                    }
+                    if (depth != 0) throw new ArgumentException("Mismatched parentheses in CEILING().");
+
+                    string inner = replaced.Substring(start, i - start);
+                    // Evaluate inner using DataTable
+                    var tbl = new DataTable();
+                    object innerObj = tbl.Compute(inner, "");
+                    double innerVal = Convert.ToDouble(innerObj, CultureInfo.InvariantCulture);
+                    double ceilVal = Math.Ceiling(innerVal);
+
+                    // Replace CEILING(inner) with numeric value
+                    replaced = replaced.Substring(0, idx) + ceilVal.ToString(CultureInfo.InvariantCulture) + replaced.Substring(i + 1);
+                }
+
+                // Evaluate remaining expression
+                var table = new DataTable();
+                object resultObj = table.Compute(replaced, "");
+                result = Convert.ToDouble(resultObj, CultureInfo.InvariantCulture);
+                return true;
+            }
+            catch
+            {
+                result = 0;
+                return false;
+            }
+        }
+
+        private static int IndexOfIgnoreCase(string source, string value)
+        {
+            return source.IndexOf(value, StringComparison.OrdinalIgnoreCase);
+        }
+
+        // Format numeric result for display.
+        // If forceInteger is true or the template uses CEILING/ROUNDUP, show integer (rounded up) without decimals.
+        // Otherwise show whole numbers without decimals and keep decimals for fractional values.
+        private string FormatResult(double value, string template, bool forceInteger)
+        {
+            if (forceInteger || IndexOfIgnoreCase(template, "CEILING(") != -1 || IndexOfIgnoreCase(template, "ROUNDUP(") != -1)
+            {
+                return Math.Ceiling(value).ToString(CultureInfo.InvariantCulture);
+            }
+
+            // If value is whole number, show without decimal point
+            if (Math.Abs(value - Math.Round(value)) < 1e-9)
+                return Math.Round(value).ToString(CultureInfo.InvariantCulture);
+
+            return value.ToString(CultureInfo.InvariantCulture);
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
 
@@ -58,13 +145,23 @@ namespace FeeCalculator
 
         private void button1_Click(object sender, EventArgs e)
         {
+            // Simple numeric calculation (keeps original behavior)
             double surcharge = Convert.ToDouble(textBox1.Text);
             double fee = Math.Ceiling((surcharge - 5) * 0.045) + 10;
 
-            label3.Text = "Fee: " + fee.ToString() +
-                "\nBreakdown: ((" + surcharge + " - 5) * 0.045) + 10";
+            // Try to evaluate admin template to override numeric fee when possible
+            var vals = new Dictionary<string, double> { ["{surcharge}"] = surcharge };
+            bool evalUsed = TryEvaluateTemplate(surchargeFormulaTemplate, vals, out double evalFee, out string replaced);
+            if (evalUsed)
+            {
+                fee = evalFee;
+            }
 
+            // Use admin template for displayed breakdown (placeholders replaced)
+            string breakdown = surchargeFormulaTemplate.Replace("{surcharge}", surcharge.ToString(CultureInfo.InvariantCulture));
 
+            label3.Text = "Fee: " + FormatResult(fee, surchargeFormulaTemplate, evalUsed) +
+                "\nBreakdown: " + breakdown;
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -151,13 +248,29 @@ namespace FeeCalculator
 
         private void button2_Click(object sender, EventArgs e)
         {
+            // Simple numeric calculation (keeps original behavior)
             double ticketTotal = Convert.ToDouble(textBox2.Text);
             double serviceFee = Convert.ToDouble(textBox3.Text);
             double arAmount = ticketTotal + serviceFee;
 
-            label5.Text = "AR Amount: " + arAmount.ToString() +
-                "\nBreakdown: " + ticketTotal + " + " + serviceFee;
+            // Try to evaluate admin template to override numeric AR amount when possible
+            var vals = new Dictionary<string, double>
+            {
+                ["{ticketTotal}"] = ticketTotal,
+                ["{serviceFee}"] = serviceFee
+            };
+            bool evalUsed = TryEvaluateTemplate(arFormulaTemplate, vals, out double evalAr, out string replaced);
+            if (evalUsed)
+            {
+                arAmount = evalAr;
+            }
 
+            // Use admin template for displayed breakdown (placeholders replaced)
+            string breakdown = arFormulaTemplate.Replace("{ticketTotal}", ticketTotal.ToString(CultureInfo.InvariantCulture))
+                                                .Replace("{serviceFee}", serviceFee.ToString(CultureInfo.InvariantCulture));
+
+            label5.Text = "AR Amount: " + FormatResult(arAmount, arFormulaTemplate, evalUsed) +
+                "\nBreakdown: " + breakdown;
         }
         private void label6_Click(object sender, EventArgs e)
         {
@@ -193,6 +306,11 @@ namespace FeeCalculator
             textBox2.Clear();
             textBox3.Clear();
             label5.Text = "AR Amount:";
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
