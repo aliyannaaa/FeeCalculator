@@ -43,15 +43,17 @@
             label6 = new Label();
             textBox3 = new TextBox();
             panel2 = new Panel();
+            button6 = new Button();
             button5 = new Button();
             panel4 = new Panel();
+            label8 = new Label();
             panel3 = new Panel();
+            button7 = new Button();
             button4 = new Button();
             panel5 = new Panel();
+            label9 = new Label();
             button3 = new Button();
             label7 = new Label();
-            label8 = new Label();
-            label9 = new Label();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             panel4.SuspendLayout();
@@ -204,6 +206,7 @@
             // panel2
             // 
             panel2.BackgroundImage = (Image)resources.GetObject("panel2.BackgroundImage");
+            panel2.Controls.Add(button6);
             panel2.Controls.Add(button5);
             panel2.Controls.Add(panel4);
             panel2.Controls.Add(label1);
@@ -214,6 +217,17 @@
             panel2.Name = "panel2";
             panel2.Size = new Size(254, 297);
             panel2.TabIndex = 12;
+            // 
+            // button6
+            // 
+            button6.Location = new Point(82, 233);
+            button6.Name = "button6";
+            button6.Size = new Size(90, 24);
+            button6.TabIndex = 15;
+            button6.Text = "Print";
+            button6.UseVisualStyleBackColor = true;
+            button6.Visible = false;
+            button6.Click += button6_Click;
             // 
             // button5
             // 
@@ -235,9 +249,21 @@
             panel4.Size = new Size(254, 31);
             panel4.TabIndex = 7;
             // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
+            label8.Location = new Point(10, 8);
+            label8.Name = "label8";
+            label8.Size = new Size(78, 15);
+            label8.TabIndex = 16;
+            label8.Text = "surcharge fee";
+            label8.Click += label8_Click;
+            // 
             // panel3
             // 
             panel3.BackgroundImage = (Image)resources.GetObject("panel3.BackgroundImage");
+            panel3.Controls.Add(button7);
             panel3.Controls.Add(button4);
             panel3.Controls.Add(panel5);
             panel3.Controls.Add(textBox3);
@@ -250,6 +276,17 @@
             panel3.Name = "panel3";
             panel3.Size = new Size(273, 297);
             panel3.TabIndex = 13;
+            // 
+            // button7
+            // 
+            button7.Location = new Point(99, 233);
+            button7.Name = "button7";
+            button7.Size = new Size(90, 24);
+            button7.TabIndex = 14;
+            button7.Text = "Print";
+            button7.UseVisualStyleBackColor = true;
+            button7.Visible = false;
+            button7.Click += button7_Click;
             // 
             // button4
             // 
@@ -270,6 +307,16 @@
             panel5.Name = "panel5";
             panel5.Size = new Size(273, 31);
             panel5.TabIndex = 12;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
+            label9.Location = new Point(18, 8);
+            label9.Name = "label9";
+            label9.Size = new Size(81, 15);
+            label9.TabIndex = 17;
+            label9.Text = "ar amount fee";
             // 
             // button3
             // 
@@ -292,27 +339,6 @@
             label7.Size = new Size(180, 15);
             label7.TabIndex = 15;
             label7.Text = "Choose what fee to be calculated";
-            // 
-            // label8
-            // 
-            label8.AutoSize = true;
-            label8.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
-            label8.Location = new Point(10, 8);
-            label8.Name = "label8";
-            label8.Size = new Size(78, 15);
-            label8.TabIndex = 16;
-            label8.Text = "surcharge fee";
-            label8.Click += label8_Click;
-            // 
-            // label9
-            // 
-            label9.AutoSize = true;
-            label9.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
-            label9.Location = new Point(18, 8);
-            label9.Name = "label9";
-            label9.Size = new Size(81, 15);
-            label9.TabIndex = 17;
-            label9.Text = "ar amount fee";
             // 
             // Form1
             // 
@@ -369,5 +395,7 @@
         private Button button5;
         private Label label8;
         private Label label9;
+        private Button button6;
+        private Button button7;
     }
 }
