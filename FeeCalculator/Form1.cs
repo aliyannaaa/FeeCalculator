@@ -1,6 +1,7 @@
 using System.Data;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Drawing.Printing;
 
 namespace FeeCalculator
 {
@@ -12,6 +13,11 @@ namespace FeeCalculator
 
             this.KeyPreview = true;
             this.KeyDown += Form1_KeyDown;
+
+            // Allow pressing Enter in the textboxes to trigger calculations
+            this.textBox1.KeyDown += TextBox1_KeyDown;
+            this.textBox2.KeyDown += TextBox2Or3_KeyDown;
+            this.textBox3.KeyDown += TextBox2Or3_KeyDown;
 
             label1.Text = "Surchage";
             label1.Visible = false;
@@ -30,6 +36,7 @@ namespace FeeCalculator
             textBox3.Visible = false;
             panel3.Visible = false;
 
+
         }
 
         // Toggle visibility of the admin button using a hotkey (Ctrl+Shift+A)
@@ -43,17 +50,13 @@ namespace FeeCalculator
             }
         }
 
-        // Templates for admin-editable formula breakdowns. Use placeholders:
-        // {surcharge} - replaced with the surcharge input value
-        // {ticketTotal} - replaced with ticket total input value
-        // {serviceFee} - replaced with service fee input value
-        private string surchargeFormulaTemplate = "(({surcharge} - 5) * 0.045) + 10";
+        private string surchargeFormulaTemplate = "(({surcharge} + 5) * 0.045) + 10";
         private string arFormulaTemplate = "{ticketTotal} + {serviceFee}";
 
         // Note: numeric calculations use the original straightforward logic.
         // Admin templates are used only to display the breakdown text by replacing placeholders.
 
-        // Try to evaluate a template to a numeric value. Supports basic arithmetic and a CEILING(...) function.
+        // Supports basic arithmetic and a CEILING(...) function.
         // Templates should contain placeholders like {surcharge}, {ticketTotal}, {serviceFee} which will be
         // replaced with numeric values before evaluation.
         private bool TryEvaluateTemplate(string template, IDictionary<string, double> values, out double result, out string replaced)
@@ -147,7 +150,7 @@ namespace FeeCalculator
         {
             // Simple numeric calculation (keeps original behavior)
             double surcharge = Convert.ToDouble(textBox1.Text);
-            double fee = Math.Ceiling((surcharge - 5) * 0.045) + 10;
+            double fee = Math.Ceiling((surcharge + 5) * 0.045) + 10;
 
             // Try to evaluate admin template to override numeric fee when possible
             var vals = new Dictionary<string, double> { ["{surcharge}"] = surcharge };
@@ -171,7 +174,28 @@ namespace FeeCalculator
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
+            
 
+        }
+
+        private void TextBox1_KeyDown(object? sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                // Trigger surcharge calculation
+                button1.PerformClick();
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        private void TextBox2Or3_KeyDown(object? sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                // Trigger AR amount calculation
+                button2.PerformClick();
+                e.SuppressKeyPress = true;
+            }
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -312,5 +336,115 @@ namespace FeeCalculator
         {
 
         }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            // Check if there is actually a result to print
+            if (string.IsNullOrEmpty(textBox2.Text) || string.IsNullOrEmpty(textBox3.Text))
+            {
+                MessageBox.Show("Please calculate the AR Amount first.", "Empty Data", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Build the Receipt String
+            string receiptContent = "        OFFICIAL RECEIPT        \n";
+            receiptContent += "--------------------------------\n";
+            receiptContent += $"Date: {DateTime.Now.ToString("MM/dd/yyyy HH:mm")}\n";
+            receiptContent += "Type: AR Amount Calculation\n";
+            receiptContent += "--------------------------------\n";
+            receiptContent += $"Ticket Total:  {textBox2.Text}\n";
+            receiptContent += $"Service Fee:   {textBox3.Text}\n";
+            receiptContent += "--------------------------------\n";
+            receiptContent += $"{label5.Text}\n"; // This contains your AR Amount and Breakdown
+            receiptContent += "--------------------------------\n";
+            receiptContent += "       THANK YOU!       \n";
+
+            // Call the PrintReceipt helper method
+            PrintReceipt(receiptContent);
+        }
+
+        // Variable to store what we want to print
+        private string printText = "";
+
+        private void PrintReceipt(string content)
+        {
+            printText = content;
+            PrintDocument pd = new PrintDocument();
+
+            // This tells the printer WHAT to draw
+            pd.PrintPage += new PrintPageEventHandler(this.pd_PrintPage);
+
+            // This creates the Pop-Up Window
+            PrintPreviewDialog receiptPopUp = new PrintPreviewDialog();
+            receiptPopUp.Document = pd;
+
+            // Show the pop-up on top of your main form
+            receiptPopUp.ShowDialog(this);
+        }
+
+        // This is where the "drawing" happens
+        private void pd_PrintPage(object sender, PrintPageEventArgs ev)
+        {
+            // Define the font and layout
+            Font printFont = new Font("Courier New", 10);
+            //float linesPerPage = 0;
+            //float yPos = 0;
+            float leftMargin = ev.MarginBounds.Left;
+            float topMargin = ev.MarginBounds.Top;
+
+            // Draw the text onto the page
+            ev.Graphics.DrawString(printText, printFont, Brushes.Black, leftMargin, topMargin, new StringFormat());
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            // 1. Validation: Don't print if there's no data
+            if (string.IsNullOrWhiteSpace(textBox1.Text))
+            {
+                MessageBox.Show("Please enter a surcharge amount and calculate first.", "No Data", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // 2. Build the Receipt String
+            string receiptContent = "        OFFICIAL RECEIPT       \n";
+            receiptContent += "--------------------------------\n";
+            receiptContent += $"Date: {DateTime.Now.ToString("MM/dd/yyyy HH:mm")}\n";
+            receiptContent += "Type: Surcharge Calculation\n";
+            receiptContent += "--------------------------------\n";
+            receiptContent += $"Surcharge: {textBox1.Text}\n";
+            receiptContent += "--------------------------------\n";
+
+            // label3.Text already contains "Fee: X \nBreakdown: Y" from your button1_Click
+            receiptContent += $"{label3.Text}\n";
+
+            receiptContent += "--------------------------------\n";
+            receiptContent += "         THANK YOU!       \n";
+
+            // 3. Send to the printer engine
+            PrintReceipt(receiptContent);
+        }
+
+        /*private void SendToPhysicalPrinter(string content)
+        {
+            printText = content; // Your receipt string
+            PrintDocument pd = new PrintDocument();
+
+        // Standard 80mm thermal paper is roughly 300 hundredths of an inch wide
+            pd.DefaultPageSettings.PaperSize = new PaperSize("Custom", 300, 1000);
+
+            // 1. Link the drawing logic
+            pd.PrintPage += new PrintPageEventHandler(this.pd_PrintPage);
+
+            // 2. Create the real Windows Print Dialog
+            PrintDialog printDlg = new PrintDialog();
+            printDlg.Document = pd;
+
+            // 3. Execution
+            if (printDlg.ShowDialog() == DialogResult.OK)
+            {
+                // This command sends the data to the printer's queue
+                pd.Print();
+            }
+        }*/
     }
 }
