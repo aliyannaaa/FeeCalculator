@@ -9,6 +9,12 @@ Fee = ROUNDUP((Surcharge - 5) x 0.045) + 10
 
 The user enters a surcharge amount, clicks the "Compute" button, and the computed fee is displayed on the form.
 
+It calculates the AR amount using the following formula:
+
+AR Amount = Ticket total + payment service fee
+
+The user enters a total amount of the ticket and the servivce fee, clicks the "Compute" button, and the computed fee is displayed on the form.
+
 ---
 
 # Application Architecture
@@ -49,4 +55,6 @@ The UI is responsible for:
 1. Windows Forms was used because it is simple and suitable for beginner-level desktop applications.
 2. Math.Ceiling() was used to implement the ROUNDUP requirement.
 3. The application follows event-driven programming where the calculation happen when the button is clicked.
-4. 
+4. Implemented a hidden hotkey (Ctrl + Shift + A) to toggle admin features, keeping configuration tools away from standard users while maintaining a clean UI.
+5. Controls are dynamically shown or hidden based on the selected fee type to reduce clutter and prevent input errors.
+6. 
