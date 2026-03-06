@@ -5,7 +5,7 @@
 This application is a simple Windows Forms (WinForms) desktop program developed in C#.
 It calculates a service fee using the following formula:
 
-Fee = ROUNDUP((Surcharge - 5) x 0.045) + 10
+Fee = ROUNDUP((Surcharge + 5) x 0.045) + 10
 
 The user enters a surcharge amount, clicks the "Compute" button, and the computed fee is displayed on the form.
 
@@ -57,4 +57,3 @@ The UI is responsible for:
 3. The application follows event-driven programming where the calculation happen when the button is clicked.
 4. Implemented a hidden hotkey (Ctrl + Shift + A) to toggle admin features, keeping configuration tools away from standard users while maintaining a clean UI.
 5. Controls are dynamically shown or hidden based on the selected fee type to reduce clutter and prevent input errors.
-6. 
