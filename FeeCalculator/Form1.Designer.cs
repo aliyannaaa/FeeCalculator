@@ -66,7 +66,7 @@
             button1.Location = new Point(31, 188);
             button1.Name = "button1";
             button1.Size = new Size(90, 24);
-            button1.TabIndex = 0;
+            button1.TabIndex = 7;
             button1.Text = "Compute";
             button1.UseVisualStyleBackColor = true;
             button1.Visible = false;
@@ -77,9 +77,8 @@
             textBox1.Location = new Point(82, 80);
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(145, 23);
-            textBox1.TabIndex = 1;
+            textBox1.TabIndex = 5;
             textBox1.Visible = false;
-            textBox1.TextChanged += textBox1_TextChanged;
             // 
             // label1
             // 
@@ -89,10 +88,9 @@
             label1.Location = new Point(17, 84);
             label1.Name = "label1";
             label1.Size = new Size(63, 15);
-            label1.TabIndex = 2;
+            label1.TabIndex = 4;
             label1.Text = "Surcharge:";
             label1.Visible = false;
-            label1.Click += label1_Click;
             // 
             // label2
             // 
@@ -105,7 +103,6 @@
             label2.TabIndex = 3;
             label2.Text = "Ticket Total:";
             label2.Visible = false;
-            label2.Click += label2_Click;
             // 
             // textBox2
             // 
@@ -137,7 +134,6 @@
             label3.TabIndex = 6;
             label3.Text = "Fee:";
             label3.Visible = false;
-            label3.Click += label3_Click;
             // 
             // panel1
             // 
@@ -147,7 +143,7 @@
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
             panel1.Size = new Size(764, 31);
-            panel1.TabIndex = 7;
+            panel1.TabIndex = 0;
             // 
             // label4
             // 
@@ -167,7 +163,7 @@
             comboBox1.Location = new Point(315, 46);
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(124, 23);
-            comboBox1.TabIndex = 8;
+            comboBox1.TabIndex = 2;
             comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             // 
             // label5
@@ -193,7 +189,6 @@
             label6.TabIndex = 10;
             label6.Text = "Payment Service Fee:";
             label6.Visible = false;
-            label6.Click += label6_Click;
             // 
             // textBox3
             // 
@@ -233,7 +228,7 @@
             button5.Location = new Point(137, 188);
             button5.Name = "button5";
             button5.Size = new Size(90, 24);
-            button5.TabIndex = 14;
+            button5.TabIndex = 8;
             button5.Text = "Clear";
             button5.UseVisualStyleBackColor = true;
             button5.Click += button5_Click;
@@ -246,7 +241,7 @@
             panel4.Location = new Point(0, 0);
             panel4.Name = "panel4";
             panel4.Size = new Size(254, 31);
-            panel4.TabIndex = 7;
+            panel4.TabIndex = 3;
             // 
             // label8
             // 
@@ -257,7 +252,6 @@
             label8.Size = new Size(78, 15);
             label8.TabIndex = 16;
             label8.Text = "surcharge fee";
-            label8.Click += label8_Click;
             // 
             // panel3
             // 
@@ -321,7 +315,7 @@
             button3.Location = new Point(476, 47);
             button3.Name = "button3";
             button3.Size = new Size(123, 23);
-            button3.TabIndex = 14;
+            button3.TabIndex = 5;
             button3.Text = "Admin";
             button3.UseVisualStyleBackColor = true;
             button3.Visible = false;
@@ -335,7 +329,7 @@
             label7.Location = new Point(133, 50);
             label7.Name = "label7";
             label7.Size = new Size(180, 15);
-            label7.TabIndex = 15;
+            label7.TabIndex = 1;
             label7.Text = "Choose what fee to be calculated";
             // 
             // Form1
