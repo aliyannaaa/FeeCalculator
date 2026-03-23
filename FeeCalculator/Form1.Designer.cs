@@ -43,12 +43,10 @@
             label6 = new Label();
             textBox3 = new TextBox();
             panel2 = new Panel();
-            button6 = new Button();
             button5 = new Button();
             panel4 = new Panel();
             label8 = new Label();
             panel3 = new Panel();
-            button7 = new Button();
             button4 = new Button();
             panel5 = new Panel();
             label9 = new Label();
@@ -201,7 +199,6 @@
             // panel2
             // 
             panel2.BackgroundImage = (Image)resources.GetObject("panel2.BackgroundImage");
-            panel2.Controls.Add(button6);
             panel2.Controls.Add(button5);
             panel2.Controls.Add(panel4);
             panel2.Controls.Add(label1);
@@ -212,16 +209,6 @@
             panel2.Name = "panel2";
             panel2.Size = new Size(254, 297);
             panel2.TabIndex = 12;
-            // 
-            // button6
-            // 
-            button6.Location = new Point(86, 245);
-            button6.Name = "button6";
-            button6.Size = new Size(75, 23);
-            button6.TabIndex = 15;
-            button6.Text = "Print";
-            button6.UseVisualStyleBackColor = true;
-            button6.Click += button6_Click;
             // 
             // button5
             // 
@@ -256,7 +243,6 @@
             // panel3
             // 
             panel3.BackgroundImage = (Image)resources.GetObject("panel3.BackgroundImage");
-            panel3.Controls.Add(button7);
             panel3.Controls.Add(button4);
             panel3.Controls.Add(panel5);
             panel3.Controls.Add(textBox3);
@@ -269,16 +255,6 @@
             panel3.Name = "panel3";
             panel3.Size = new Size(273, 297);
             panel3.TabIndex = 13;
-            // 
-            // button7
-            // 
-            button7.Location = new Point(99, 245);
-            button7.Name = "button7";
-            button7.Size = new Size(75, 23);
-            button7.TabIndex = 16;
-            button7.Text = "Print";
-            button7.UseVisualStyleBackColor = true;
-            button7.Click += button7_Click;
             // 
             // button4
             // 
@@ -347,7 +323,6 @@
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Name = "Form1";
             Text = "Fee Calculator";
-            Load += Form1_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             panel2.ResumeLayout(false);
@@ -387,7 +362,7 @@
         private Button button5;
         private Label label8;
         private Label label9;
-        private Button button6;
-        private Button button7;
+        /*private Button button6;
+        private Button button7;*/
     }
 }
