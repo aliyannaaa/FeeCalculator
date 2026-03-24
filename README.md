@@ -9,6 +9,8 @@ Fee = ROUNDUP((Surcharge + 5) x 0.045) + 10
 
 The user enters a surcharge amount, clicks the "Compute" button, and the computed fee is displayed on the form.
 
+Admin button - Ctrl + Shift + A
+
 ---
 
 # Application Architecture
@@ -49,4 +51,3 @@ The UI is responsible for:
 1. Windows Forms was used because it is simple and suitable for beginner-level desktop applications.
 2. Math.Ceiling() was used to implement the ROUNDUP requirement.
 3. The application follows event-driven programming where the calculation happen when the button is clicked.
-4. 
