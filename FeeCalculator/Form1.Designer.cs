@@ -83,7 +83,7 @@
             label1.AutoSize = true;
             label1.BackColor = Color.Transparent;
             label1.ForeColor = SystemColors.ControlLightLight;
-            label1.Location = new Point(17, 84);
+            label1.Location = new Point(13, 83);
             label1.Name = "label1";
             label1.Size = new Size(63, 15);
             label1.TabIndex = 4;
@@ -95,7 +95,7 @@
             label2.AutoSize = true;
             label2.BackColor = Color.Transparent;
             label2.ForeColor = SystemColors.ControlLightLight;
-            label2.Location = new Point(25, 77);
+            label2.Location = new Point(22, 77);
             label2.Name = "label2";
             label2.Size = new Size(71, 15);
             label2.TabIndex = 3;
@@ -158,7 +158,7 @@
             comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBox1.FormattingEnabled = true;
             comboBox1.Items.AddRange(new object[] { "", "Surcharge Fee", "AR Amount Fee" });
-            comboBox1.Location = new Point(315, 46);
+            comboBox1.Location = new Point(320, 46);
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(124, 23);
             comboBox1.TabIndex = 2;
@@ -181,7 +181,7 @@
             label6.AutoSize = true;
             label6.BackColor = Color.Transparent;
             label6.ForeColor = SystemColors.ControlLightLight;
-            label6.Location = new Point(25, 118);
+            label6.Location = new Point(21, 119);
             label6.Name = "label6";
             label6.Size = new Size(118, 15);
             label6.TabIndex = 10;

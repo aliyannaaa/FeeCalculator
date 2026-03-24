@@ -17,7 +17,6 @@ namespace FeeCalculator
             SetInitialUIState();
             FixTabOrder();
 
-            // Set focus to the ComboBox so you don't need the mouse at startup
             this.ActiveControl = comboBox1;
         }
 
@@ -28,9 +27,11 @@ namespace FeeCalculator
             this.textBox1.KeyDown += TextBox1_KeyDown;
             this.textBox2.KeyDown += TextBox2Or3_KeyDown;
             this.textBox3.KeyDown += TextBox2Or3_KeyDown;
-
-            // This is required for the Enter key to open the dropdown
             this.comboBox1.KeyDown += ComboBox1_KeyDown;
+
+            // Handlers to loop focus back to ComboBox when Tabbing from the last button
+            this.button4.KeyDown += Button_TabLoop;
+            this.button5.KeyDown += Button_TabLoop;
         }
 
         private void SetInitialUIState()
@@ -41,18 +42,18 @@ namespace FeeCalculator
 
         private void FixTabOrder()
         {
-            comboBox1.TabIndex = 0; // ComboBox should be first
+            comboBox1.TabIndex = 0;
+
+            // Surcharge Sequence
+            textBox1.TabIndex = 1;
+            button1.TabIndex = 2;
+            button5.TabIndex = 3;
 
             // AR Amount Sequence
             textBox2.TabIndex = 1;
             textBox3.TabIndex = 2;
             button2.TabIndex = 3;
             button4.TabIndex = 4;
-
-            // Surcharge Sequence
-            textBox1.TabIndex = 1;
-            button1.TabIndex = 2;
-            button5.TabIndex = 3;
         }
 
         private void Form1_Load(object sender, EventArgs e) { }
@@ -61,20 +62,36 @@ namespace FeeCalculator
 
         private void Form1_KeyDown(object? sender, KeyEventArgs e)
         {
+            // Ctrl+Shift+A for Admin
             if (e.Control && e.Shift && e.KeyCode == Keys.A)
             {
                 button3.Visible = !button3.Visible;
                 e.SuppressKeyPress = true;
             }
+
+            // ESC to quickly reset to the "Blank" start state
+            if (e.KeyCode == Keys.Escape)
+            {
+                comboBox1.SelectedIndex = -1;
+                comboBox1.Focus();
+            }
         }
 
-        // This makes the ComboBox interactive via keyboard
         private void ComboBox1_KeyDown(object? sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                // Toggle the dropdown list
                 comboBox1.DroppedDown = !comboBox1.DroppedDown;
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        // Logic to jump from the end of a section back to the start (ComboBox)
+        private void Button_TabLoop(object? sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Tab && !e.Shift)
+            {
+                comboBox1.Focus();
                 e.SuppressKeyPress = true;
             }
         }
@@ -134,7 +151,6 @@ namespace FeeCalculator
         {
             UpdateUIVisibility(comboBox1.SelectedItem?.ToString() ?? string.Empty);
 
-            // Move focus to the first textbox automatically after selecting a type
             if (comboBox1.SelectedItem?.ToString() == "Surcharge Fee") textBox1.Focus();
             else if (comboBox1.SelectedItem?.ToString() == "AR Amount Fee") textBox2.Focus();
         }
@@ -185,11 +201,31 @@ namespace FeeCalculator
             }
         }
 
-        private void button5_Click(object sender, EventArgs e) { textBox1.Clear(); label3.Text = "Fee:"; }
-        private void button4_Click(object sender, EventArgs e) { textBox2.Clear(); textBox3.Clear(); label5.Text = "AR Amount:"; }
+        private void button5_Click(object sender, EventArgs e)
+        {
+            textBox1.Clear();
+            label3.Text = "Fee:";
+            textBox1.Focus();
+        }
 
-        private void TextBox1_KeyDown(object? sender, KeyEventArgs e) { if (e.KeyCode == Keys.Enter) { button1.PerformClick(); e.SuppressKeyPress = true; } }
-        private void TextBox2Or3_KeyDown(object? sender, KeyEventArgs e) { if (e.KeyCode == Keys.Enter) { button2.PerformClick(); e.SuppressKeyPress = true; } }
+        private void button4_Click(object sender, EventArgs e)
+        {
+            textBox2.Clear();
+            textBox3.Clear();
+            label5.Text = "AR Amount:";
+            textBox2.Focus();
+        }
+
+        private void TextBox1_KeyDown(object? sender, KeyEventArgs e) 
+        { if (e.KeyCode == Keys.Enter) 
+            { button1.PerformClick(); 
+                e.SuppressKeyPress = true; } 
+        }
+        private void TextBox2Or3_KeyDown(object? sender, KeyEventArgs e) 
+        { if (e.KeyCode == Keys.Enter) 
+            { button2.PerformClick(); 
+                e.SuppressKeyPress = true; } 
+        }
 
         #endregion
     }
