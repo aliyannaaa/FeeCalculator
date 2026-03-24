@@ -17,7 +17,7 @@ namespace FeeCalculator
             SetInitialUIState();
             FixTabOrder();
 
-            // FIX: Set focus to the ComboBox so you don't need the mouse at startup
+            // Set focus to the ComboBox so you don't need the mouse at startup
             this.ActiveControl = comboBox1;
         }
 
@@ -29,7 +29,7 @@ namespace FeeCalculator
             this.textBox2.KeyDown += TextBox2Or3_KeyDown;
             this.textBox3.KeyDown += TextBox2Or3_KeyDown;
 
-            // UNCOMMENTED: This is required for the Enter key to open the dropdown
+            // This is required for the Enter key to open the dropdown
             this.comboBox1.KeyDown += ComboBox1_KeyDown;
         }
 
@@ -68,7 +68,7 @@ namespace FeeCalculator
             }
         }
 
-        // MOVED OUT OF COMMENTS: This makes the ComboBox interactive via keyboard
+        // This makes the ComboBox interactive via keyboard
         private void ComboBox1_KeyDown(object? sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
